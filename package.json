@@ -1,0 +1,29 @@
+{
+  "name": "employee_tracker",
+  "version": "1.0.0",
+  "description": "app to tack employees",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "watch": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PFZM/Employee_Tracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PFZM/Employee_Tracker/issues"
+  },
+  "homepage": "https://github.com/PFZM/Employee_Tracker#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^8.2.0",
+    "mysql2": "^2.3.3-rc.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
