@@ -2,7 +2,7 @@ const figlet = require("figlet");
 const chalk = require("chalk");
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
-const { viewQuery } = require("./queries");
+const { viewQuery, addQuery } = require("./queries");
 
 const init = async () => {
   // figlet("Employee - Tracker", function (err, data) {
