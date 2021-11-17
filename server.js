@@ -5,10 +5,14 @@ const mysql = require("mysql2");
 const { viewQuery, addQuery } = require("./queries");
 
 const init = async () => {
-  // figlet("Employee - Tracker", function (err, data) {
-  //   err ? console.error(err) : console.log(chalk.blue(data));
-  // });
-  await showMainMenu();
+  figlet("Employee - Tracker", function (err, data) {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log(chalk.blue(data));
+      showMainMenu();
+    }
+  });
 };
 
 function showMainMenu() {
