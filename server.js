@@ -60,7 +60,7 @@ function showMainMenu() {
             throw new Error("Invalid choice");
           }
         }
-        await viewQuery(table);
+        viewQuery(table);
         return showMainMenu();
       } else if (
         selection.options === "Add a department" ||
@@ -89,7 +89,7 @@ function showMainMenu() {
         return showMainMenu();
       } else if (selection.options === "Update an employee role") {
         let updateItem = "employee";
-        await updateQuery(updateItem);
+        updateQuery(updateItem);
         return showMainMenu();
       } else if (selection.options === "Quit") {
         process.exit();
