@@ -89,7 +89,7 @@ async function addQuery(table) {
       newRole = data;
       let deptChoices;
       const depSql = "SELECT department_name, id FROM department";
-      db.query(depSql, (err_2, results) => {
+      db.query(depSql, async (err_2, results) => {
         if (err_2) {
           console.error(err_2);
         } else {
@@ -153,7 +153,7 @@ async function addQuery(table) {
       newEmployee = data;
       let roleChoices;
       const rolSql = "SELECT role_name, id FROM role";
-      db.query(rolSql, (err_6, results) => {
+      db.query(rolSql, async (err_6, results) => {
         if (err_6) {
           console.error(err_6);
         } else {
@@ -173,7 +173,7 @@ async function addQuery(table) {
         let managerChoices;
         const mangSql =
           "SELECT employee.id e, manager.first_name manager FROM employee e JOIN employee manager ON e.manager_id = manager.id";
-        db.query(mangSql, (err_8, results) => {
+        db.query(mangSql, async (err_8, results) => {
           if (err_8) {
             console.error(err_8);
           } else {
