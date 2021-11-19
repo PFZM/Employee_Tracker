@@ -1,10 +1,56 @@
-# 12 SQL: Employee Tracker
+# README - EMPLOYEE TRACKER
 
-## Your Task
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Developers frequently have to create interfaces that allow non-developers to easily view and interact with information stored in databases. These interfaces are called **content management systems (CMS)**. Your assignment this week is to build a command-line application from scratch to manage a company's employee database, using Node.js, Inquirer, and MySQL.
+## Link to see the deployed application:
 
-# Acceptance Criteria
+[YouTube video](https://youtu.be/)
+
+## Description
+
+This is a command-line application (Content Management System - interface) to manage a company's employee database, it uses Node.Js, [Inquirer package](https://www.npmjs.com/package/inquirer), [MySQL2 package](https://www.npmjs.com/package/mysql2) to connect to a MySQL database and [console.table package](https://www.npmjs.com/package/console.table) to print MySQL rows to the console. 
+
+## Table of contents:
+
+1. [Installation](#installation)
+2. [Usage](#usage)
+3. [License](#license)
+4. [Contributing](#contributing)
+5. [Questions](#questions)
+
+## Installation
+
+1. Fork repository
+2. Clone repository to local environment.
+3. Node.js must be installed.
+4. To install all the dependencies (inquirer, mysql2, dotenv, console.table, chalk, figlet) use the following command:
+
+```bash
+npm install
+```
+
+## Usage
+
+The application is invoked by using the following command (on the directory containing this project):
+
+```bash
+node server.js
+```
+
+Below describes the functionality of this application:
+
+```
+WHEN I start the application
+THEN I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
+
+WHEN I choose to view all departments
+THEN I am presented with a formatted table showing department names and department ids
+
+WHEN I choose to view all roles
+THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
+
+WHEN I choose to view all employees
+THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
 
 WHEN I choose to add a department
 THEN I am prompted to enter the name of the department and that department is added to the database
@@ -17,58 +63,25 @@ THEN I am prompted to enter the employee’s first name, last name, role, and ma
 
 WHEN I choose to update an employee role
 THEN I am prompted to select an employee to update and their new role and this information is updated in the database
-
 ```
 
-## Mock-Up
 
-The following video shows an example of the application being used from the command line:
+## License
 
-[![A video thumbnail shows the command-line employee management application with a play button overlaying the view.](./Assets/12-sql-homework-video-thumbnail.png)](https://2u-20.wistia.com/medias/2lnle7xnpk)
+This project is covered under the MIT license.
 
-## Getting Started
+## Contributing
 
-You’ll need to use the [MySQL2 package](https://www.npmjs.com/package/mysql2) to connect to your MySQL database and perform queries, the [Inquirer package](https://www.npmjs.com/package/inquirer) to interact with the user via the command line, and the [console.table package](https://www.npmjs.com/package/console.table) to print MySQL rows to the console.
+When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
+Please note we have a code of conduct, please follow it in all your interactions with the project.
+Contributions follow the [Contributor Convenant](http://contributor-covenant.org/version/1/4/).
 
-**Important**: You will be committing a file that contains your database credentials. Make sure that your MySQL password is not used for any other personal accounts, because it will be visible on GitHub. In upcoming lessons, you will learn how to better secure this password, or you can start researching npm packages now that could help you.
+## Questions
 
-You might also want to make your queries asynchronous. MySQL2 exposes a `.promise()` function on Connections to upgrade an existing non-Promise connection to use Promises. To learn more and make your queries asynchronous, refer to the [npm documentation on MySQL2](https://www.npmjs.com/package/mysql2).
+[GitHub profile](http://github.com/PFZM)
 
-Design the database schema as shown in the following image:
+[Contact Me - Email](mailto:pfzm@hotmail.com)
 
-![Database schema includes tables labeled “employee,” role,” and “department.”](./Assets/12-sql-homework-demo-01.png)
-
-As the image illustrates, your schema should contain the following three tables:
-
-- `department`
-
-  - `id`: `INT PRIMARY KEY`
-
-  - `name`: `VARCHAR(30)` to hold department name
-
-- `role`
-
-  - `id`: `INT PRIMARY KEY`
-
-  - `title`: `VARCHAR(30)` to hold role title
-
-  - `salary`: `DECIMAL` to hold role salary
-
-  - `department_id`: `INT` to hold reference to department role belongs to
-
-- `employee`
-
-  - `id`: `INT PRIMARY KEY`
-
-  - `first_name`: `VARCHAR(30)` to hold employee first name
-
-  - `last_name`: `VARCHAR(30)` to hold employee last name
-
-  - `role_id`: `INT` to hold reference to employee role
-
-  - `manager_id`: `INT` to hold reference to another employee that is the manager of the current employee (`null` if the employee has no manager)
-
-You might want to use a separate file that contains functions for performing specific SQL queries you'll need to use. A constructor function or class could be helpful for organizing these. You might also want to include a `seeds.sql` file to pre-populate your database, making the development of individual features much easier.
 
 ## Bonus
 
@@ -84,75 +97,7 @@ Try to add some additional functionality to your application, such as the abilit
 
 - View the total utilized budget of a department&mdash;in other words, the combined salaries of all employees in that department.
 
-## Grading Requirements
 
-This homework is graded based on the following criteria:
 
-### Deliverables: 10%
 
-- Your GitHub repository containing your application code.
 
-### Walkthrough Video: 27%
-
-- A walkthrough video that demonstrates the functionality of the employee tracker must be submitted, and a link to the video should be included in your README file.
-
-- The walkthrough video must show all of the technical acceptance criteria being met.
-
-- The walkthrough video must demonstrate how a user would invoke the application from the command line.
-
-- The walkthrough video must demonstrate a functional menu with the options outlined in the acceptance criteria.
-
-### Technical Acceptance Criteria: 40%
-
-- Satisfies all of the preceding acceptance criteria plus the following:
-
-  - Uses the [Inquirer package](https://www.npmjs.com/package/inquirer).
-
-  - Uses the [MySQL2 package](https://www.npmjs.com/package/mysql2) to connect to a MySQL database.
-
-  - Uses the [console.table package](https://www.npmjs.com/package/console.table) to print MySQL rows to the console.
-
-- Follows the table schema outlined in the homework instructions.
-
-### Repository Quality: 13%
-
-- Repository has a unique name.
-
-- Repository follows best practices for file structure and naming conventions.
-
-- Repository follows best practices for class/id naming conventions, indentation, quality comments, etc.
-
-- Repository contains multiple descriptive commit messages.
-
-- Repository contains a high-quality README with description and a link to a walkthrough video.
-
-### Application Quality 10%
-
-- The application user experience is intuitive and easy to navigate.
-
-### Bonus
-
-Fulfilling any of the following can add up to 20 points to your grade. Note that the highest grade you can achieve is still 100:
-
-- Application allows users to update employee managers (2 points).
-
-- Application allows users to view employees by manager (2 points).
-
-- Application allows users to view employees by department (2 points).
-
-- Application allows users to delete departments, roles, and employees (2 points for each).
-
-- Application allows users to view the total utilized budget of a department&mdash;in other words, the combined salaries of all employees in that department (8 points).
-
-## Review
-
-You are required to submit BOTH of the following for review:
-
-- A walkthrough video demonstrating the functionality of the application.
-
-- The URL of the GitHub repository, with a unique name and a README describing the project.
-
----
-
-© 2021 Trilogy Education Services, LLC, a 2U, Inc. brand. Confidential and Proprietary. All Rights Reserved.
-```
