@@ -4,11 +4,11 @@
 
 ## Link to see the deployed application:
 
-[YouTube video](https://youtu.be/)
+[YouTube video](https://youtu.be/pxRV9KRcwd4)
 
 ## Description
 
-This is a command-line application (Content Management System - interface) to manage a company's employee database, it uses Node.Js, [Inquirer package](https://www.npmjs.com/package/inquirer), [MySQL2 package](https://www.npmjs.com/package/mysql2) to connect to a MySQL database and [console.table package](https://www.npmjs.com/package/console.table) to print MySQL rows to the console. 
+This is a command-line application (Content Management System - interface) to manage a company's employee database, it uses Node.Js, [Inquirer package](https://www.npmjs.com/package/inquirer), [MySQL2 package](https://www.npmjs.com/package/mysql2) to connect to a MySQL database and [console.table package](https://www.npmjs.com/package/console.table) to print MySQL rows to the console.
 
 ## Table of contents:
 
@@ -65,7 +65,6 @@ WHEN I choose to update an employee role
 THEN I am prompted to select an employee to update and their new role and this information is updated in the database
 ```
 
-
 ## License
 
 This project is covered under the MIT license.
@@ -82,7 +81,6 @@ Contributions follow the [Contributor Convenant](http://contributor-covenant.org
 
 [Contact Me - Email](mailto:pfzm@hotmail.com)
 
-
 ## Bonus
 
 Try to add some additional functionality to your application, such as the ability to do the following:
@@ -96,8 +94,3 @@ Try to add some additional functionality to your application, such as the abilit
 - Delete departments, roles, and employees.
 
 - View the total utilized budget of a department&mdash;in other words, the combined salaries of all employees in that department.
-
-
-
-
-

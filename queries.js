@@ -19,14 +19,19 @@ async function viewQuery(table) {
   try {
     const results = await db.promise().execute(sql);
     return results[0];
-  } catch (error) {
+  } catch (err) {
     console.error(err);
   }
 }
 
 async function getManagersQuery() {
-  const sql = "SELECT * from employee where manager_id = NULL";
-  return (await db.promise().execute(sql))[0];
+  try {
+    const sql = "SELECT * FROM employee WHERE manager_id IS NULL";
+    const results = await db.promise().execute(sql);
+    return results[0];
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 async function addQuery(table) {
@@ -49,8 +54,8 @@ async function addQuery(table) {
       const results = await db.promise().execute(sql);
       console.log("New department has been added to Department's");
       return true;
-    } catch (err_1) {
-      console.log(err_1);
+    } catch (err) {
+      console.log(err);
     }
   } else if (table === "role") {
     try {
@@ -160,7 +165,7 @@ async function addQuery(table) {
         },
       ]);
       try {
-        const sql = `INSERT INTO ${table} (first_name, last_name, role, manager_id) VALUES ("${data.name}", "${data.last_name}", "${data.role}", ${data.managerID})`;
+        const sql = `INSERT INTO ${table} (first_name, last_name, role_id, manager_id) VALUES ("${data.name}", "${data.last_name}", "${data.role}", ${data.manager})`;
         const results = await db.promise().execute(sql);
         console.log("New employee has been added to Employee's table");
         return true;
@@ -173,4 +178,45 @@ async function addQuery(table) {
   }
 }
 
-module.exports = { viewQuery, addQuery };
+async function updateQuery(updateItem) {
+  try {
+    const data = await inquirer.prompt([
+      {
+        type: "list",
+        name: "employee_selection",
+        message: "What employee do you want to update?",
+        choices: async function () {
+          const results = await viewQuery("employee");
+          return results.map(({ first_name, last_name, id }) => ({
+            name: `${first_name} ${last_name}`,
+            value: id,
+          }));
+        },
+      },
+      {
+        type: "list",
+        name: "new_role",
+        message: "What is the new role of this employee?",
+        choices: async function () {
+          const results = await viewQuery("role");
+          return results.map(({ role_name, id }) => ({
+            name: role_name,
+            value: id,
+          }));
+        },
+      },
+    ]);
+    try {
+      const sql = `UPDATE employee SET role_id = ${data.new_role} WHERE id = ${data.employee_selection}`;
+      const results = await db.promise().execute(sql);
+      console.log("Employee information has been updated");
+      return true;
+    } catch (err) {
+      console.error(err);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+module.exports = { viewQuery, addQuery, updateQuery };
