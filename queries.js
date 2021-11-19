@@ -2,12 +2,11 @@ const db = require("./config/connection");
 const cTable = require("console.table");
 const inquirer = require("inquirer");
 
-function viewQuery(table) {
+async function viewQuery(table) {
   let sql;
   if (table === "department") {
     sql = `SELECT * FROM ${table};`;
   } else if (table === "role") {
-    console.log("I am here");
     sql = `SELECT role_name, role.id, department_name, salary 
     FROM ${table} INNER JOIN department ON ${table}.department_id = department.id`;
   } else if (table === "employee") {
@@ -17,17 +16,20 @@ function viewQuery(table) {
     LEFT JOIN department ON role.department_id = department.id
     LEFT JOIN employee manager ON e.manager_id = manager.id`;
   }
-  db.query(sql, (err, results) => {
-    if (err) {
-      console.error(err);
-    } else {
-      console.table(`\n ${table}s`, results);
-    }
-  });
+  try {
+    const results = await db.promise().execute(sql);
+    return results[0];
+  } catch (error) {
+    console.error(err);
+  }
+}
+
+async function getManagersQuery() {
+  const sql = "SELECT * from employee where manager_id = NULL";
+  return (await db.promise().execute(sql))[0];
 }
 
 async function addQuery(table) {
-  let sql;
   if (table === "department") {
     try {
       const newDept = await inquirer.prompt({
@@ -43,20 +45,14 @@ async function addQuery(table) {
           }
         },
       });
-      sql = `INSERT INTO ${table} (department_name) VALUES ("${newDept.new_dept}")`;
-      db.query(sql, (err, results) => {
-        if (err) {
-          console.error(err);
-        } else {
-          console.log(`${newDept.new_dept} added to ${table}s`);
-        }
-      });
+      const sql = `INSERT INTO ${table} (department_name) VALUES ("${newDept.new_dept}")`;
+      const results = await db.promise().execute(sql);
+      console.log("New department has been added to Department's");
       return true;
     } catch (err_1) {
       console.log(err_1);
     }
   } else if (table === "role") {
-    let newRole;
     try {
       const data = await inquirer.prompt([
         {
@@ -67,7 +63,7 @@ async function addQuery(table) {
             if (new_role) {
               return true;
             } else {
-              console.log("Please enter a department");
+              console.log("Please enter a role");
               return false;
             }
           },
@@ -85,42 +81,31 @@ async function addQuery(table) {
             }
           },
         },
+        {
+          type: "list",
+          name: "department",
+          message: "What is the department of this role?",
+          choices: async function () {
+            const results = await viewQuery("department");
+            return results.map(({ department_name, id }) => ({
+              name: department_name,
+              value: id,
+            }));
+          },
+        },
       ]);
-      newRole = data;
-      let deptChoices;
-      const depSql = "SELECT department_name, id FROM department";
-      db.query(depSql, async (err_2, results) => {
-        if (err_2) {
-          console.error(err_2);
-        } else {
-          deptChoices = results.map(({ department_name, id }) => ({
-            name: department_name,
-            value: id,
-          }));
-          const depChoice = await inquirer.prompt({
-            type: "list",
-            name: "department",
-            message: "What is the department of this role?",
-            choices: deptChoices,
-          });
-          newRole.depId = depChoice.department;
-          sql = `INSERT INTO ${table} (role_name, salary, department_id) VALUES ('${newRole.new_role}',${newRole.salary},${newRole.depId})`;
-          db.query(sql, (err_3, results) => {
-            if (err_3) {
-              console.error(err_3);
-              return false;
-            } else {
-              console.log(`${newRole.new_role} added to ${table}s`);
-              return true;
-            }
-          });
-        }
-      });
-    } catch (err_4) {
-      console.log(err_4);
+      const sql = `INSERT INTO ${table} (role_name, salary, department_id) VALUES ('${data.new_role}',${data.salary},${data.department})`;
+      try {
+        const results = await db.promise().execute(sql);
+        console.log("New role has been added to Role's table");
+        return true;
+      } catch (err) {
+        console.error(err);
+      }
+    } catch (err) {
+      console.log(err);
     }
   } else if (table === "employee") {
-    let newEmployee;
     try {
       const data = await inquirer.prompt([
         {
@@ -149,58 +134,41 @@ async function addQuery(table) {
             }
           },
         },
-      ]);
-      newEmployee = data;
-      let roleChoices;
-      const rolSql = "SELECT role_name, id FROM role";
-      db.query(rolSql, async (err_6, results) => {
-        if (err_6) {
-          console.error(err_6);
-        } else {
-          roleChoices = results.map(({ role_name, id }) => ({
-            name: role_name,
-            value: id,
-          }));
-
-          const newEmployeeRole = await inquirer.prompt({
-            type: "list",
-            name: "role",
-            message: "What is the role of this employee?",
-            choices: roleChoices,
-          });
-          newEmployee.roleId = newEmployeeRole.role;
-        }
-        let managerChoices;
-        const mangSql =
-          "SELECT employee.id e, manager.first_name manager FROM employee e JOIN employee manager ON e.manager_id = manager.id";
-        db.query(mangSql, async (err_8, results) => {
-          if (err_8) {
-            console.error(err_8);
-          } else {
-            managerChoices = results.map(({ manager, id }) => ({
-              name: manager,
+        {
+          type: "list",
+          name: "role",
+          message: "What is the role of this employee?",
+          choices: async function () {
+            const results = await viewQuery("role");
+            return results.map(({ role_name, id }) => ({
+              name: role_name,
               value: id,
             }));
-            const newEmployeeManager = await inquirer.prompt({
-              type: "list",
-              name: "manager",
-              message: "Who is the manager of this employee?",
-              choices: managerChoices,
-            });
-            newEmployee.managerID = newEmployeeManager.manager;
-          }
-        });
-        sql = `INSERT INTO ${table} (first_name, last_name, role, manager_id) VALUES ("${newEmployee.name}", "${newEmployee.last_name}", "${newEmployee.role}", ${newEmployee.managerID})`;
-        db.query(sql, (err_9, results) => {
-          if (err_9) {
-            console.error(err_9);
-          } else {
-            console.log(`${newEmployee.name} added to ${table}s`);
-          }
-        });
-      });
-    } catch (err_10) {
-      console.log(err_10);
+          },
+        },
+        {
+          type: "list",
+          name: "manager",
+          message: "Who is the manager of this employee?",
+          choices: async function () {
+            const results = await getManagersQuery();
+            return results.map(({ first_name, last_name, id }) => ({
+              name: `${first_name} ${last_name}`,
+              value: id,
+            }));
+          },
+        },
+      ]);
+      try {
+        const sql = `INSERT INTO ${table} (first_name, last_name, role, manager_id) VALUES ("${data.name}", "${data.last_name}", "${data.role}", ${data.managerID})`;
+        const results = await db.promise().execute(sql);
+        console.log("New employee has been added to Employee's table");
+        return true;
+      } catch (err) {
+        console.error(err);
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 }

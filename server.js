@@ -36,7 +36,7 @@ const showMainMenu = async () => {
         new inquirer.Separator("-- End of List --"),
       ],
     });
-
+    console.log("\n");
     if (
       selection.options === "View all departments" ||
       selection.options === "View all roles" ||
@@ -60,7 +60,8 @@ const showMainMenu = async () => {
           throw new Error("Invalid choice");
         }
       }
-      viewQuery(table);
+      const results = await viewQuery(table);
+      console.table(results);
       await showMainMenu();
     } else if (
       selection.options === "Add a department" ||
@@ -89,7 +90,7 @@ const showMainMenu = async () => {
       await showMainMenu();
     } else if (selection.options === "Update an employee role") {
       let updateItem = "employee";
-      updateQuery(updateItem);
+      await updateQuery(updateItem);
       await showMainMenu();
     } else if (selection.options === "Quit") {
       process.exit();
